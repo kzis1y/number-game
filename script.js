@@ -7,6 +7,7 @@ const guessInput = document.querySelector(".guess");
 const messageEl = document.querySelector(".message");
 const score = document.querySelector(".score");
 const highScore = document.querySelector(".high_score")
+const gameOver = document.querySelector(".game_over")
 
 // select all buttons
 const btnReset = document.querySelector(".reset");
@@ -17,7 +18,7 @@ const secretNumber = Math.trunc(Math.random() * 20) + 1;
 let userScore = 20;
 let highestScore = 0;
 
-secretNumberEl.textContent = secretNumber; // just for experiment 
+// secretNumberEl.textContent = secretNumber; // just for experiment 
 
 // messageEl.textContent = 'akshin'
 console.log(messageEl);
@@ -25,19 +26,14 @@ console.log(messageEl);
 btnCheck.addEventListener("click", function () {
   let userNumber = +guessInput.value;
 
-// if user dosn't add any number
-  if (guessInput.value) {
-    console.log("guessInput.value", guessInput.value);
-    messageEl.textContent = "No Number";
-  }
-  if (userNumber < secretNumber) {
-    messageEl.textContent = "Too low";
-    userScore--;
-    score.textContent = userScore;
-  }
+if (userScore === 0) return
 
-  if (userNumber > secretNumber) {
-    messageEl.textContent = "Too high";
+// if user dosn't add any number
+  if (guessInput.value) messageEl.textContent = "No Number";
+
+  if (userNumber !== secretNumber) {
+    if (userNumber > secretNumber) messageEl.textContent = "Too high";
+    if (userNumber < secretNumber) messageEl.textContent = "Too low";
     userScore--;
     score.textContent = userScore;
   }
@@ -48,4 +44,21 @@ btnCheck.addEventListener("click", function () {
     highScore = userScore
   }
 
+  if (userScore === 0) {
+    gameOver.textContent = 'Game Over :/'
+    container.style.backgroundColor = 'red'
+    secretNumberEl.textContent = secretNumber;
+  }
+
 });
+
+
+btnReset.addEventListener('click', function() {
+    userScore = 20
+    score.textContent = userScore
+    guessInput.value = ''
+    secretNumberEl.textContent = '?'
+    container.style.backgroundColor = 'black'
+    messageEl.textContent = 'Start guessing...'
+    secretNumber = Math.trunc(Math.random() * 20) + 1
+  })
